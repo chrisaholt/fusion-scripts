@@ -5,11 +5,9 @@ import adsk.core, adsk.fusion, adsk.cam, traceback
 def get_input(ui, text_prompt, title, default_value):
     value, cancelled = ui.inputBox(text_prompt, title, default_value)
     if cancelled:
-        exit(1)
+        return None
     if not value:
         raise ValueError("Unknown value entered.")
-    print(value)
-    print(type(value))
     return value
 
 def run(context):
@@ -31,6 +29,8 @@ def run(context):
         length = get_input(ui, f"Enter the length of the box ({units_name}):", "Box Length", "100")
         width = get_input(ui, f"Enter the width of the box ({units_name}):", "Box Width", "50")
         height = get_input(ui, f"Enter the height of the box ({units_name}):", "Box Height", "25")
+        if length is None or width is None or height is None:
+            return
 
         length = units_manager.evaluateExpression(length, units_name)
         width = units_manager.evaluateExpression(width, units_name)
